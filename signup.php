@@ -72,9 +72,11 @@ if(isset($_POST["Submit"]))
 
             else
             {
+                
+				// $mql = "INSERT INTO users (username,f_name,l_name,email) VALUES ('".$_POST['cr_user']."','".md5($_POST['cr_pass'])."','".$_POST['cr_email']."')";
                 $sql = "INSERT INTO users ".
                    "(username,f_name,l_name,email,phone,password,address) "."VALUES ".
-                   "(' $Uname',' $Fname','$Lname',' $email',' $phone','$password','$address')";    
+                   "(' $Uname',' $Fname','$Lname',' $email',' $phone','".md5($password)."','$address')";    
                    if ($db->query($sql) === TRUE) 
                    {
                      function_alert("New record created successfully");

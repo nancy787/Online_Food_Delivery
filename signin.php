@@ -10,7 +10,8 @@
        
        if(!empty($_POST["Submit"]))   // if records were not empty
         {
-       $loginquery ="SELECT * FROM users WHERE username ='$username' or password ='$password'"; //selecting matching records
+         $loginquery=   "SELECT * FROM users WHERE username='$username' or password='".md5($password)."'";
+    //    $loginquery ="SELECT * FROM users WHERE username ='$username' or password ='$password'"; //selecting matching records
         echo("$username ,$password");
        $result=mysqli_query($db, $loginquery); //executing
        $row=mysqli_fetch_array($result);{} 
@@ -128,7 +129,7 @@
                                     <a href="signup.php" class="btn btn-primary w-100 py-3" type="">Not Register Sign Up</a>
                                 </div>
                                 <div class="col-12">
-                                    <a href="#" class="btn btn-primary w-100 py-3" type="">Forget Password</a>
+                                    <a href="forgetpas.php" class="btn btn-primary w-100 py-3" type="">Forget Password</a>
                                 </div>
                             </div>
                         </form>

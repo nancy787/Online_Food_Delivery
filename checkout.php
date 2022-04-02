@@ -1,3 +1,22 @@
+
+<?php
+
+include("connection/connect.php"); 
+$coupon_code=isset($_POST['coupon_code']);
+$discount=isset($_POST['discount']);
+$query=mysqli_query($db,"select * from admin_codes where  codes ='$coupon_code' and discount='$discount'");
+$row=mysqli_fetch_array($query);
+if (mysqli_num_rows($query)>0){
+	echo json_encode(array(
+				// "statusCode"=>200,
+				"value"=>$row['value']
+			));
+}
+else{
+	// echo json_encode(array("statusCode"=>201));
+}
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 <?php 
@@ -166,8 +185,8 @@ else{
                         </form>
                         <table>
                         <tr>
-                                                        <td>Cart Subtotal</td>
-                                                        <td> <?php echo "Rs ".$item_total; ?></td>
+                                                        <td><strong>Item Subtotal</strong></td>
+                                                        <td> <strong><?php echo  "&nbsp &nbsp"."Rs ".$item_total; ?></strong></td>
                                                     </tr>
                                                     
                                                     <!-- <tr>
@@ -175,26 +194,42 @@ else{
                                                         <td> <?php echo $rows; ?></td>
                                                     </tr> -->
                                                     <tr>
-                                                        <td>Shipping &amp; Handling</td>
-                                                        <td>free shipping</td>
+                                                        <!-- <td>Shipping &amp; Handling</td> -->
+                                                        <td><strong>free Delivery</strong></td>
                                                     </tr>
                                                     <tr>
+                                                    <form method="post"> 
+                                                <input type="number" name="tip" placeholder="enter tip" />
+                                                <input  type="submit" name="addtip"  class="tn btn-outline-danger m-2" value="Add Tip">
+                                                <?php  
+                                                    if(isset($_POST['addtip']))  
+                                                    {  
+                                                        $tip = $_POST['tip'];  
+                                                       
+                                                         $item_total+=$tip;     
+                                              
+                                                    }  
+                                                    ?>
+												</form>
+                                                       
                                                         <td class="text-color"><strong>Total</strong></td>
-                                                        <td class="text-color"><strong> <?php echo "Rs ".$item_total; ?></strong></td>
+                                                        <td class="text-color"><strong> <?php echo "Rs ".$item_total ; ?></strong></td>
                                                     </tr>
+                                                  
                                                 </tbody>
+                                               
+                                               
 												
-												
-												
-												
+												         
                                             </table>
                                             
+                                         
                     <!-- Important For PayPal Checkout -->
                     <form action="<?php echo PAYPAL_URL; ?>" method="post" id="paypal_form">
                     <input type="hidden" name="business" value="<?php echo PAYPAL_ID; ?>">
                     <!-- <label> Product Name</label> -->
                     <input type="text" name="item_name" id="item" hidden value="<?php echo $item_total?>" required><br><br>
-                    <label>Enter Price</label>
+                    <!-- <label>Enter Price</label> -->
                     <input type="number"  name="amount"  required hidden  value="<?php echo $item_total;?>" id="">
                     
                     <input type="hidden" name="currency_code" value="<?php echo PAYPAL_CURRENCY; ?>">
@@ -210,33 +245,21 @@ else{
                 </form>
 												 
 											   
-                                                    
+                                                    <?php  
+function  createConfirmationmbox() {  
+    echo '<script type="text/javascript"> ';  
+    echo 'var inputname = prompt("Please enter your name", "");';  
+    echo 'alert(inputname);';  
+    echo '</script>';  
+}  
+?>  
                             
-                                                      <!-- <tr>
-                                                        <td>Cart Subtotal</td>
-                                                        <td> <?php echo "Rs ".$item_total; ?></td>
-                                                    </tr> -->
                                                     
-                                                    <!-- <tr>
-                                                        <td>Cart Subtotal</td>
-                                                        <td> <?php echo $rows; ?></td>
-                                                    </tr> -->
-                                                    <!-- <tr>
-                                                        <td>Shipping &amp; Handling</td>
-                                                        <td>free shipping</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td class="text-color"><strong>Total</strong></td>
-                                                        <td class="text-color"><strong> <?php echo "Rs ".$item_total; ?></strong></td>
-                                                    </tr>
-                                                </tbody> -->
-												
-												
-												
 												
                                             </table>
                                         </div>
                                     </div>
+                                    
                                     <!--cart summary-->
                                     <div class="payment-option">
                                         <!-- <ul class=" list-unstyled">
@@ -251,6 +274,7 @@ else{
                                             </li>
                                         </ul> -->
                                         <p class="text-xs-center"> <input type="submit" onclick="return confirm('Are you sure?');" name="submit"  class="btn btn-outline-success btn-block w-100" value="cash on delivery"> </p>
+                                        
                                        <!-- <a href="index1.php" class="btn btn-success">Order with paypal</a>  -->
                                     
                                     </div>
@@ -374,4 +398,5 @@ else{
           xhttp.send();
         }
     });
+
 </script>
